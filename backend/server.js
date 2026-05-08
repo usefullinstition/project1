@@ -2,74 +2,87 @@
 // const cors = require("cors");
 
 // const app = express();
+
 // app.use(cors());
 // app.use(express.json());
 
-// // 🤖 SIMPLE AI LOGIC (MVP)
-// function getReply(message) {
-//   message = message.toLowerCase();
+// // HOME ROUTE (Fix Cannot GET /)
+// // app.get("/", (req, res) => {
+// //   res.send("🚀 Gebeya AI Backend is Live!");
+// // });
 
-//   if (message.includes("ዋጋ")) {
-//     return "ዋጋው 500 ብር ነው 💰";
-//   }
-
-//   if (message.includes("አለ")) {
-//     return "አዎ አለ ✔️ ትዘዙ ይችላሉ";
-//   }
-
-//   if (message.includes("delivery")) {
-//     return "Delivery በ1–2 ቀን ውስጥ ይደርሳል 🚚";
-//   }
-
-//   return "አልገባኝም 😅 እባክዎ በቀላሉ ይድገሙ";
-// }
-
-// // 📩 CHAT ROUTE
+// // // CHAT API
+// // app.post("/chat", (req, res) => {
+// //   const message = req.body.message?.toLowerCase() || "";
+// app.get("/", (req, res) => {
+//   res.send("🚀 Backend is running on Render");
+// });
 // app.post("/chat", (req, res) => {
-//   const message = req.body.message;
-//   const reply = getReply(message);
+//   res.json({ reply: "Hello from server 🚀" });
+// });
+
+// const PORT = process.env.PORT || 5000;
+
+// app.listen(PORT, () => {
+//   console.log("Server running on port " + PORT);
+// });
+
+//   let reply = "እባክሽ ዝርዝር ጠይቂ 😊";
+
+//   if (message.includes("ሰላም") || message.includes("hello")) {
+//     reply = "ሰላም 👋 እንኳን ደህና መጣሽ!";
+//   } else if (message.includes("ዋጋ")) {
+//     reply = "ዋጋው 500 ብር ነው 💰";
+//   } else if (message.includes("delivery")) {
+//     reply = "Delivery በ1-2 ቀን ውስጥ ይደርሳል 🚚";
+//   } else if (message.includes("payment")) {
+//     reply = "በTelebirr ወይም CBE መክፈል ትችላለሽ 💳";
+//   }
 
 //   res.json({ reply });
 // });
 
-// // 🚀 START SERVER
-// app.listen(5000, () => {
-//   console.log("Gebeya AI backend running on port 5000 🚀");
+// // IMPORTANT: Render uses PORT
+// const PORT = process.env.PORT || 10000;
+
+// app.listen(PORT, () => {
+//   console.log("Server running on port " + PORT);
 // });
 
 
 const express = require("express");
 const cors = require("cors");
-const OpenAI = require("openai");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const openai = new OpenAI({
-  apiKey: "YOUR_API_KEY",
-});
 
-app.post("/chat", async (req, res) => {
-  const message = req.body.message;
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4.1-mini",
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are a helpful AI sales assistant for Ethiopian businesses. Reply in Amharic or English.",
-      },
-      { role: "user", content: message },
-    ],
-  });
 
-  const reply = completion.choices[0].message.content;
+// chat API
+app.post("/chat", (req, res) => {
+  const message = req.body.message?.toLowerCase() || "";
+
+  let reply = "እባክሽ ዝርዝር ጠይቂ 😊";
+
+  if (message.includes("ሰላም")) {
+    reply = "ሰላም 👋 እንኳን ደህና መጣሽ!";
+  } else if (message.includes("ዋጋ")) {
+    reply = "ዋጋው 500 ብር ነው 💰";
+  } else if (message.includes("delivery")) {
+    reply = "Delivery 1-2 ቀን 🚚";
+  }
 
   res.json({ reply });
 });
+// test route (IMPORTANT)
+app.get("/", (req, res) => {
+  res.send("🚀 🚀 Gebeya AI Server is Live");
+});
+// IMPORTANT: use Render PORT
+const PORT = process.env.PORT || 5000;
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
 });
