@@ -12,28 +12,26 @@ const adminAuthRoutes = require("./routes/adminAuth");
 
 const app = express();
 
-// middleware
 app.use(cors());
 app.use(express.json());
 
-// database
 connectDB();
 
-// routes
+// ROUTES
 app.use("/chat", chatRoutes);
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/admin/auth", adminAuthRoutes);
 app.use("/payment", paymentRoutes);
 
-// root route
+// HOME
 app.get("/", (req, res) => {
-  res.send("🚀 🚀 Gebeya AI Server is Live");
+  res.send("🚀 Gebeya AI Server is Live");
 });
 
-// port
+// PORT
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
   console.log("Server running on port " + PORT);
 });
+require("./bot");
